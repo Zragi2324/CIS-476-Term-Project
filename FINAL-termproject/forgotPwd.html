@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/forgotPwd.css">
+    <title>Driveshare</title>
+</head>
+<body>
+    <div id="container">
+        <form id="forgotPWDForm" method="post">
+            <label for="username">Enter your username</label><br>
+            <input type="text" id="username" placeholder="Username" required><br>
+            <button type="submit" id="btnSubmit">Submit</button>
+        </form>
+        <div id="questions"></div>
+    </div>
+
+    <script>
+        function SubmitAnswers(username, answers) {
+            fetch("checkAnswers.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+               body: JSON.stringify({ 'username': username, 'answers': answers }) // Include both username and answers in the request body
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert("Answers are correct!");
+                    window.location.href = "carlistings.html";
+                } else {
+                    alert("Answers are incorrect");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error.message);
+                alert("An error occurred while validating answers.");
+            });
+        }
+
+        document.getElementById("forgotPWDForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            if (username) {
+                fetch("forgotPwd.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ "username": username })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        const questionsPlace = document.getElementById("questions");
+                        questionsPlace.innerHTML = "";
+                       
+                        for (const [key, value] of Object.entries(data.questions)) {
+                            const questionDiv = document.createElement("div");
+                            questionDiv.innerHTML = `<label for="${key}">${value}</label><br>
+                                                    <input type="text" id="${key}" name="${key}" required><br>`;
+                            questionsPlace.appendChild(questionDiv);
+                        }
+
+                        const submitQuestions = document.createElement("button");
+                        submitQuestions.textContent = "Submit Answers";
+                        submitQuestions.type = "submit";
+                        questionsPlace.appendChild(submitQuestions);
+                        submitQuestions.addEventListener("click", function(event2) {
+                            event2.preventDefault();
+                            const answers = {};
+                                        
+                            
+                            for (const [key, _] of Object.entries(data.questions)) {
+                                const answer = document.getElementById(key).value;
+                                
+                               // const replaceKey = key.replace();
+                                answers[key] = answer; 
+                            }
+                            SubmitAnswers(username, answers);
+                        });
+                    } else {
+                        alert("The username/email does not exist.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error.message);
+                    alert(error.message);
+                });
+            } else {
+                alert("Please enter a username/email to reset password");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="loginStyles.css">
+    <title>Driveshare</title>
+</head>
+<body>
+    
+    <h1 id="loginText"> Login to use the driveshare app</h1>
+
+    <div class="loginD">
+        <form id ="loginForm">
+            <label for ="username">Login</label><br>
+            <input type ="text" id = "username" placeholder="username"><br>
+            <input type ="password" id ="pwd" placeholder="password"><br>
+            <button type ="submit" id="btnSubmit">Submit</button>
+            <button type ="button" id ="forgotpwd">Forgot Password</button>
+            <button type ="button" id = "register">Register</button>
+    </form>
+    </div>
+
+    <script>
+        const loginForm = document.querySelector("#loginForm");
+        const register = document.querySelector("#register");
+        const forgotPwdbtn = document.querySelector("#forgotpwd");
+
+        forgotPwdbtn.addEventListener("click", function(){
+            window.location.href = "forgotPwd.html";
+        });
+        register.addEventListener("click", function(){
+            window.location.href = "register.html";
+        });
+loginForm.addEventListener("submit", function(event){
+    event.preventDefault(); // Prevent default form submission
+    const uName = document.querySelector("#username").value;
+    const password = document.querySelector("#pwd").value;
+
+    fetch("login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "username": uName,
+            "password": password,
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.log("There was an error");
+            console.log(response)
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Response from server:", data); // Log the response
+        if (data.success) { 
+            alert("Logged in Successfully!");
+            window.location.href = "carlistings.html";
+        } else {
+            alert("Login Failed. Please enter a valid username and password");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error.message);
+        alert(error.message);
+    });
+});
+
+    </script>
+
+</body>
+</html>

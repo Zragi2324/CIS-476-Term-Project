@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/carlistings.css">
+    <title>Driveshare</title>
+</head>
+<body>
+    
+    <h4 id="introTxt"> What would you like to do?</h4>
+
+    <!--Use the button below to show the form-->
+   
+    
+    <div id="container">
+        
+        <button id="AddCarListing">Add new car to listings </button>
+        <button id="modifyAListing">Modify existing Listings</button>
+        <button id="searchListing">Search/book a car</button>
+        <button id="makePayment">Make payment</button>
+        <button id="notifications">notifications</button>
+    <div id="listingHide" class="listingHide">
+        <form id ="carListing">
+            <label for ="username">enter your username</label><br>
+            <input type ="text" id = "username" placeholder="username"><br>
+            <input type ="number" id = "vin" placeholder="Enter your car vin"><br>
+            <input type ="text" id ="carMake" placeholder="Car make"><br>
+            <input type ="text" id ="carModel" placeholder="Car model"><br>
+            <input type ="text" id ="carYear" placeholder="Car year"><br>
+            <input type = "text" id = "carColor" placeholder="Car color"><br>
+            <input type = "text" id="carMileage" placeholder ="Car Mileage"><br>
+            <label for ="availablilityStart">calendar availablility start</label><br>
+            <input type = "date" id="availablilityStart" ><br>
+            <label for ="availablilityEnd">calendar availablility end</label><br>
+            <input type = "date" id="availablilityEnd" ><br>
+            <input type = "text" id="pickupLocation" placeholder ="Pickup loation"><br>
+            <input type = "number" id="rentPrice" placeholder ="rental pricing  $"><br>
+            <button type ="submit" id="btnSubmit">Submit</button>
+
+            
+        </form>
+        </div>
+        <div id="modifyListingHide" class="modifyListingHide">
+            <form id ="modifyCarListing">
+                
+                <input type ="number" id = "vin2" placeholder="Enter your car vin"><br>
+                <input type ="text" id ="carMake2" placeholder="Car make"><br>
+                <input type ="text" id ="carModel2" placeholder="Car model"><br>
+                <input type ="text" id ="carYear2" placeholder="Car year"><br>
+                <input type = "text" id = "carColor2" placeholder="Car color"><br>
+                <input type = "text" id="carMileage2" placeholder ="Car Mileage"><br>
+                <label for ="availablilityStart2">calendar availablility start</label><br>
+                <input type = "date" id="availablilityStart2" ><br>
+                <label for ="availablilityEnd2">calendar availablility end</label><br>
+                <input type = "date" id="availablilityEnd2" placeholder ="calendar availablility end"><br>
+                <input type = "text" id="pickupLocation2" placeholder ="Pickup loation"><br>
+                <input type = "number" id="rentPrice2" placeholder ="rental pricing  $"><br>
+                <button type ="submit" id="btnSubmit2">Submit</button>
+    
+                
+            </form>
+    </div>
+</div>
+<script>
+
+    const listingButton = document.getElementById("AddCarListing");
+    const modifyingButton = document.getElementById("modifyAListing");
+    const searchingCarBtn = document.getElementById("searchListing");
+    const bookingCar = document.getElementById("bookingCar");
+    const makePayment = document.getElementById("makePayment");
+    const checkNotifications = document.getElementById("notifications");
+
+    searchingCarBtn.addEventListener('click', function (){
+        window.location.href="./searchListing.html";
+    });
+
+
+    
+    makePayment.addEventListener('click', function (){
+        window.location.href="./payment.html";
+    });
+
+    checkNotifications.addEventListener('click', function (){
+        window.location.href="./notifications/pushNotifications.html";
+    });
+
+    listingVisible = false;
+modifyingVisible = false;
+
+listingButton.addEventListener("click", function (){
+    const  listing = document.getElementById("listingHide");
+    if(listingVisible == false){
+            listing.classList.remove("listingHide");
+            listing.classList.add("listingsShow");
+            listingVisible = true;
+    }else{
+        listing.classList.remove("listingsShow");
+        listing.classList.add("listingHide");
+        listingVisible = false;
+    }
+});
+
+modifyingButton.addEventListener("click", function (){
+    const modifying = document.getElementById("modifyListingHide");
+    if (modifyingVisible == false) {
+        modifying.classList.remove("modifyListingHide");
+        modifying.classList.add("modifyListingShow");
+        modifyingVisible = true;
+    } else {
+        modifying.classList.remove("modifyListingShow");
+        modifying.classList.add("modifyListingHide");
+        modifyingVisible = false;
+    }
+});
+    const carListingForm = document.getElementById("carListing");
+    const carModifyForm = document.getElementById("modifyCarListing");
+
+    carModifyForm.addEventListener("submit", function(event){
+        event.preventDefault();
+        
+    const carID = document.getElementById("vin2").value;
+    const carMake = document.getElementById("carMake2").value;
+    const carModel = document.getElementById("carModel2").value;
+    const carYear = document.getElementById("carYear2").value;
+    const carColor = document.getElementById("carColor2").value;
+    const carMileage = document.getElementById("carMileage2").value;
+    const startDate = document.getElementById("availablilityStart2").value;
+    const endDate = document.getElementById("availablilityEnd2").value;
+    const pickupLocation = document.getElementById("pickupLocation2").value;
+    const rentPrice = document.getElementById("rentPrice2").value;
+
+    const data ={
+        "carID": carID,
+        "carMake": carMake,
+        "carModel": carModel,
+        "carYear": carYear,
+        "carColor": carColor,
+        "carMileage": carMileage,
+        "startDate": startDate,
+        "endDate": endDate,
+        "pickupLocation": pickupLocation,
+        "rentPrice": rentPrice
+    };
+    
+    fetch("updateCar.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle the response from the backend
+        if (data.success) {
+            alert("Car information updated successfully");
+        } else {
+            alert("Failed to update car information");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error.message);
+        alert("An error occurred while updating car information.");
+    });
+
+    }); 
+
+    carListingForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+    
+        const userName1 = document.getElementById("username").value;
+        const vin = document.getElementById("vin").value;
+        const carMake = document.getElementById("carMake").value;
+        const carModel = document.getElementById("carModel").value;
+        const carColor = document.getElementById("carColor").value;
+        const carMileage = document.getElementById("carMileage").value;
+        const startDate = document.getElementById("availablilityStart").value;
+        const endDate = document.getElementById("availablilityEnd").value;
+        const carYear = document.getElementById("carYear").value;
+        const pickupLoc = document.getElementById("pickupLocation").value;
+        const rentPrice = document.getElementById("rentPrice").value;
+    
+        if (userName1 && vin && carMake && carModel && carColor && startDate && endDate && carYear && pickupLoc && rentPrice && carMileage) {
+            fetch("carlistings.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ 
+                    "userName1": userName1, 
+                    "vin": vin,
+                    "carMake": carMake,
+                    "carModel": carModel,
+                    "carColor": carColor,
+                    "carMileage": carMileage,
+                    "startDate": startDate,
+                    "endDate": endDate,
+                    "carYear": carYear,
+                    "pickupLoc": pickupLoc,
+                    "rentPrice": rentPrice
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    alert("Vehicle was safely added to the listing");
+                    location.reload();
+                } else {
+                    alert("Vehicle could not be added, check if the vehicle has already been added to the listing");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error.message);
+                //alert("An error occurred while inserting the vehicle to the listing.");
+            });
+        } else {
+            alert("Enter all the information to add your car to the listing");
+        }
+    });
+    
+        
+    </script>
+</body>
+
+</html>

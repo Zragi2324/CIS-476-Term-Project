@@ -1,0 +1,36 @@
+
+body{
+    background-image: url("../images/carBluejpg.jpg");
+    background-size: cover;
+}
+
+#container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100vw;
+    height: 60vh;
+
+}
+
+#forgotPWDForm{
+    background-color: white;
+    border: 2px solid black;
+    padding: 5px;
+    margin-right: 50px;
+}
+
+#container input[type="text"],
+#container label,
+#container button {
+    font-size: 1.5rem;
+}
+
+#questions{
+    background-color: white;
+    border:2px solid black;
+    
+}
+.questions label{
+    color: white;
+}

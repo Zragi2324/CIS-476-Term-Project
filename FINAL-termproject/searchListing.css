@@ -1,0 +1,23 @@
+
+.searching {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+.booking {
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-end; 
+    align-items: flex-end; 
+    margin-top: 20px; 
+    margin-bottom: 30px;
+    width: min-content; 
+}
+
+.makePayment{
+    
+    position: absolute;
+    top: 0;
+    right: 0;
+}

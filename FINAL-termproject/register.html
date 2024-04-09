@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="registerStyles.css">
+    <title>Driveshare</title>
+</head>
+<body>
+    
+    <h5>DRIVESHARE!</h5>
+    
+    <div class="container">
+        <form id="registerForm">
+
+            <br>
+
+            <h4>Enter an email and password for your account</h4>
+            <input type="text" id="userName" name="userName" placeholder="Username"><br>
+            <input type="password" id="loginPwd" name="loginPwd" placeholder="Password"><br>
+            <br>
+
+            <label for="sq1">Enter a security question to confirm identity</label>
+            <br>
+            <input type ="text" id = "sq1" name ="sq1" placeholder="Q1 here"><br>
+            <input type ="text" id = 'sa1' name ="sa1" placeholder =" Answer 1 here"><br>
+            <br>
+
+            <label for="sq2">Enter a security question to confirm identity</label>
+            <br>
+            <input type ="text" id = "sq2" name ="sq2" placeholder="Q2 here"><br>
+            <input type ="text" id = 'sa2' name ="sa2" placeholder ="Answer 2 here"><br>
+            <br>
+
+            <label for="sq3">Enter a security question to confirm identity</label>
+            <br>
+            <input type ="text" id = "sq3" name ="sq3" placeholder="Q3 here"><br>
+            <input type ="text" id = 'sa3' name ="sa3" placeholder ="Answer 3 here"><br>
+            <br>
+            <button type="submit" id ="submitBtn">Submit</button>
+
+        </form>
+    </div>
+
+    <script>
+        const registerForm = document.querySelector("#registerForm");
+        
+
+        registerForm.addEventListener("submit", function (event){
+            event.preventDefault();
+            const uName = document.querySelector("#userName").value;
+            const password = document.querySelector("#loginPwd").value;
+
+            const sq1 = document.querySelector("#sq1").value;
+            const sa1 = document.querySelector("#sa1").value;
+            
+            const sq2 = document.querySelector("#sq2").value;
+            const sa2 = document.querySelector("#sa2").value;
+
+
+            const sq3 = document.querySelector("#sq3").value;
+            const sa3 = document.querySelector("#sa3").value;
+
+            if (uName && password && sq1 && sa1 && sq2 && sa2 && sq3 && sa3) {
+
+                fetch("register.php",{
+                    method: "POST",
+                    headers: {
+                          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "username": uName,
+            "password": password,
+            "sq1" : sq1,
+            "sq2" : sq2,
+            "sq3": sq3,
+            "sa1" : sa1,
+            "sa2" : sa2,
+            "sa3" : sa3
+        })
+    })
+        .then(response =>{
+            if(!response.ok){
+                console.log("There was an error");
+                console.log(response);
+                
+            }
+            return response.json();
+        })
+        .then(data =>{
+            console.log("Response from server: ", data);
+            if(data.Success){
+                alert("Registered Successfully");
+                window.location.href = "carlistings.html";
+
+            }else{
+                alert("Registration failed. Enter a different username/email as this username/email exists");
+
+            }
+        })
+      .catch(error=>{
+                    console.error("Error: ", error.message);
+                    alert(error.message);
+                });
+        }
+
+    else{
+        alert("Please enter the information for all fields");
+    }
+
+});
+
+
+        
+
+    </script>
+</body>
+</html>

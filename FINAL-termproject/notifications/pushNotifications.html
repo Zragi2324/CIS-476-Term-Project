@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driveshare Notifications</title>
+</head>
+<body>
+    <h3>Notifications Page</h3>
+    <form id="userForm">
+        <input id="username" placeholder="enter username">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="newNotifications">
+        <table id="notificationsTable">
+            <thead>
+                <tr>
+                    <th>Notification</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div id="clearBtn"></div>
+
+<script>
+function deleteNotification(id) {
+    fetch("deleteNotification.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ "id": id })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network error, NOT OK');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            getNotifications();
+        } else {
+            console.error(data.error);
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+function getNotifications() {
+    const username = document.getElementById("username").value;
+    fetch("getNotifications.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"username": username})
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network error, NOT OK');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+        data.forEach(notification => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${notification.description}</td>
+                <td><button onclick="deleteNotification(${notification.id})">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error("There was an error fetching data");
+    });
+}
+
+const userNameForm = document.getElementById("userForm");
+userNameForm.addEventListener("submit", function(event){
+    event.preventDefault();
+    getNotifications();
+});
+
+// Call getNotifications when the page loads
+// window.onload = function() {
+//     getNotifications();
+// };
+</script>
+</body>
+</html>

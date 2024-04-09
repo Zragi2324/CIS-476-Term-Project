@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driveshare</title>
+</head>
+<body>
+
+    <h3> Enter your username to view your balance and make a payment </h3>
+   
+    <form id="paymentForm">
+        <input id ="username" placeholder="enter your username">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="balanceInfo">
+        
+
+    </div>
+    
+    <div id="payNow">
+        <button id="payNowbtn">Pay Now!</button>
+    </div>
+    <script>
+      const paymentForm = document.getElementById("paymentForm");
+const balanceInfoPlace = document.getElementById("balanceInfo");
+const payNowBtn = document.getElementById("payNowbtn");
+
+paymentForm.addEventListener("submit", function(event){
+    event.preventDefault();
+    const username = document.getElementById("username").value;
+
+    if (username === "") {
+        alert("Please enter your username.");
+        return;
+    }
+
+    const formData ={
+        "username" : username
+    };
+
+    fetch("balance.php",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle response from the backend
+        if (data.success) {
+            alert("Balance fetched successfully!");
+            const balance = parseFloat(data.totalBalance);
+            const formattedBalance = isNaN(balance) ? '0.00' : balance.toFixed(2);
+            balanceInfoPlace.innerHTML = `<p>Your total balance is: $${Math.abs(formattedBalance)}</p>`;
+        } else {
+            alert("Failed to get balance.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while fetching");
+    });
+});
+
+payNowBtn.addEventListener("click", function(){
+    const username = document.getElementById("username").value;
+
+    if (username === "") {
+        alert("Please enter your username.");
+        return;
+    }
+
+    const formData ={
+        "username" : username
+    };
+
+    fetch("payNow.php",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        if(data.success){
+            balanceInfoPlace.innerHTML = `<p>Your total balance is: $${0.00}</p>`;
+            alert("Payment successful! Your balance is now 0.");
+        }else{
+            alert("Failed to pay balance");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while processing the payment.");
+    });
+});
+
+
+       
+    </script>
+</body>
+</html>
