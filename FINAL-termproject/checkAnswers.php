@@ -20,27 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sa2 = $postData['answers']['sq2'];
     $sa3 = $postData['answers']['sq3'];
 
-  // echo $userID;
-  /*
-     if ($userID !== null) {
-    echo "User ID: " . $userID;
-} else {
-    echo "User not found";
-}*/
+ 
     if ($userID === null) {
         echo json_encode(array("success" => false, "error" => "User not found"));
         exit;
     }
     
-   // print_r($postData);
-   //echo "User ID: " . $userID . ", SA1: " . $postData['sq1'] . ", SA2: " . $postData['sq2'] . ", SA3: " . $postData['sq3'];
    
-    $mysqli = new mysqli("localhost", "root", "", "test");
+   
+    $mysqli = new mysqli("localhost", "root", "", "termproject");
     if ($mysqli->connect_error) {
         die("Connection Failed: " . $mysqli->connect_error);
     }
 
-    //echo $userID. ' '.$postData['sa1']. ' '. $postData['sa2'].' ' $postData['sa3'];
+ 
     $query = "SELECT *  FROM securityquestions WHERE id = ? AND sa1=? AND sa2=? AND sa3=?";
 
     $stmt = $mysqli->prepare($query);
@@ -52,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Check if there is a matching row
+  
     if ($result === false) {
         echo json_encode(array("success" => false, "error" => "Query execution failed: " . $mysqli->error));
     } else {

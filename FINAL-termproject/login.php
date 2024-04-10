@@ -20,13 +20,11 @@ if(isset($_POST)){
     $user  =  json_decode(file_get_contents("php://input")); 
     $userName=$user->username;
    $password=$user->password;
-    //echo json_encode($userName);
+    
 
-    //connect();// connect to db
+    $connect = new mysqli("localhost","root","", "termproject");
 
-    $connect = new mysqli("localhost","root","", "test");
 
-// case could not connect
    
     if($connect->connect_error){
         die("Connection failed: " .$connect->connect_error);
@@ -36,9 +34,9 @@ if(isset($_POST)){
 }
 
 
-//singleton class to manage session
+
 class manageSession {
-    private static $currentInstance; // current instance 
+    private static $currentInstance; 
 
     private function __construct(){
         session_start();

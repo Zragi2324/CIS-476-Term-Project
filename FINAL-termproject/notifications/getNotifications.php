@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userID = getUserId($username);
 
     // Establish a connection to the database
-    $connection = new mysqli("localhost", "root", "", "test");
+    $connection = new mysqli("localhost", "root", "", "termproject");
 
     // Check for connection errors
     if ($connection->connect_error) {

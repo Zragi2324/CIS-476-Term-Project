@@ -1,13 +1,11 @@
 <?php
 
 include 'getUserId.php';
+require_once 'C:/xampp/htdocs/projects/CIS-476-Term-Project/FINAL-termproject/notifications/pushNotifications.php';
 header('Content-Type: application/json');
-error_reporting(E_ALL & ~E_NOTICE);
 
-// Disable displaying notices
-ini_set('display_errors', 0);
 // Connected to  db
-$conn = new mysqli("localhost", "root", "", "test");
+$conn = new mysqli("localhost", "root", "", "termproject");
 
 // Check connection
 if ($conn->connect_error) {
@@ -78,17 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit; 
     }
     
-   // if (isCarAvailable($carId, $rentStart, $rentEnd, $conn)) {
-        /* originally worked 
-        $userId = getUserId($username);  
-        
-        
-        $query = "INSERT INTO booking (carID, userID, bookingStart, bookingEnd) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("iiss", $carId, $userId, $rentStart, $rentEnd);
-        $stmt->execute();
-        $stmt->close();
-        */
+   
         if (isCarAvailable($carId, $rentStart, $rentEnd, $conn, $username)) {
             // Get the user ID
             $userId = getUserId($username);
@@ -108,17 +96,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
                 // Calculate the total cost of the booking
                 $bookingDuration = strtotime($rentEnd) - strtotime($rentStart);
-                $bookingDays = ceil($bookingDuration / (60 * 60 * 24)); // Convert duration to days
+                $bookingDays = ceil($bookingDuration / (60 * 60 * 24)); // Converted duration to days
                 $totalCost = $carPrice * $bookingDays;
         
-                // Update the user's balance
+                // Updated the user's balance
                 $updateQuery = "UPDATE users SET balance = balance - ? WHERE ID = ?";
                 $updateStatement = $conn->prepare($updateQuery);
                 $updateStatement->bind_param("di", $totalCost, $userId);
                 $updateStatement->execute();
         
                 // Insert the booking into the booking table
-                $bookingQuery = "INSERT INTO booking (carID, userID, bookingStart, bookingEnd) VALUES (?, ?, ?, ?)";
+                $bookingQuery = "INSERT INTO booking (carID, userID, bookingStart, bookingEnd) VALUES ( ?, ?, ?, ?)";
                 $bookingStatement = $conn->prepare($bookingQuery);
                 $bookingStatement->bind_param("iiss", $carId, $userId, $rentStart, $rentEnd);
                 $bookingStatement->execute();
@@ -133,20 +121,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Output success message
                 $response = array("success" => true, "message" => "Car booked successfully!");
 
-                $BOOKED = new NotificationSubject();
-        
-               
-                $observedUpdate = new NotificationObserver("Car Booked",$userID, $conn);
-                $BOOKED->attach( $observedUpdate);
-                $BOOKED->setNotification(" car with vin number: {$carId} has been booked");
+                
+
+                // Initialize NotificationSubject and NotificationObserver objects
+               // $BOOKED = new NotificationSubject(); 
+                //$observedUpdate = new NotificationObserver("Car booked", $userID, $conn);
+                //$BOOKED->attach($observedUpdate);
+                //$BOOKED->setNotification("Your booked car with VIN number: {$carId}");
+                
+                // Output JSON response
                 echo json_encode($response);
             } else {
-                // Car not found in carInventory
+               
                 $response = array("success" => false, "message" => "Car not found in inventory.");
                 echo json_encode($response);
             }
         } else {
-            // Car not available
+            
             $response = array("success" => false, "message" => "The selected car is not available for the specified period.");
             echo json_encode($response);
         }

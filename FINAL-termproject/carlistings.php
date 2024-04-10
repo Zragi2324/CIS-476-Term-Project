@@ -1,11 +1,12 @@
 <?php
 
 require_once 'getUserId.php';
+require_once 'C:/xampp/htdocs/projects/CIS-476-Term-Project/FINAL-termproject/notifications/pushNotifications.php';
 header('Content-Type: application/json');
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
 
 // Disable displaying notices
-ini_set('display_errors', 0);
+//ini_set('display_errors', 0);
 /*
 if (isset($_SERVER['HTTP_ORIGIN'])) { 
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -324,19 +325,30 @@ function registerCar($connect, $userName1, $carListing){
     $userID = getUserId($userName1);
     $query = "INSERT INTO carinventory (carID, make, model, year, color, ownerID, startavailability, endAvailability, carMileage, pickuplocation, rentprice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $prepareStatement = $connect->prepare($query);
+    $vin = $carListing->getVin();
+    $carMake = $carListing->getCarMake();
+    $carModel = $carListing->getCarModel();
+    $carYear = $carListing->getCarYear();
+    $carColor = $carListing->getCarColor();
+    $startDate = $carListing->getStartDate();
+    $endDate = $carListing->getEndDate();
+    $carMileage = $carListing->getCarMileage();
+    $pickupLoc = $carListing->getPickupLoc();
+    $rentPrice = $carListing->getRentPrice();
+
     $prepareStatement->bind_param("sssissssssi",
-        $carListing->getVin(), 
-        $carListing->getCarMake(), 
-        $carListing->getCarModel(), 
-        $carListing->getCarYear(), 
-        $carListing->getCarColor(), 
-        $userID, 
-        $carListing->getStartDate(), 
-        $carListing->getEndDate(), 
-        $carListing->getCarMileage(), 
-        $carListing->getPickupLoc(), 
-        $carListing->getRentPrice()
-    );
+    $vin, 
+    $carMake, 
+    $carModel, 
+    $carYear, 
+    $carColor, 
+    $userID, 
+    $startDate, 
+    $endDate, 
+    $carMileage, 
+    $pickupLoc, 
+    $rentPrice
+);
     $prepareStatement->execute();
      /*
         $response = array("success" => true);
@@ -381,10 +393,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ->setRentPrice($user->rentPrice)
         ->build();
 
-    $connect = new mysqli("localhost", "root", "", "test");
+    $connect = new mysqli("localhost", "root", "", "termproject");
 
     if ($connect->connect_error) {
-        // Return error response
+        // Returned error response
         http_response_code(500);
         echo json_encode(["error" => "Connection failed: " . $connect->connect_error]);
         exit;

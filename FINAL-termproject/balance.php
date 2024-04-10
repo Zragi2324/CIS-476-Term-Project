@@ -1,7 +1,7 @@
 <?php
 include 'getUserId.php';
 
-$conn = new mysqli("localhost", "root", "", "test");
+$conn = new mysqli("localhost", "root", "", "termproject");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

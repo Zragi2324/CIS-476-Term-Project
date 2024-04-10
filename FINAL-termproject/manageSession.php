@@ -32,7 +32,7 @@ class manageSession {
 
     private function endPreviousSession($username){
         if((isset($_SESSION['username'])) && ($_SESSION['username'] === $username)){
-            $this->endSession(); // End previous session
+            $this->endSession();
         }
     }
     

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = json_decode(file_get_contents("php://input"));
     $username = $user->username;
 
-    $connect = new mysqli("localhost", "root", "", "test");
+    $connect = new mysqli("localhost", "root", "", "termproject");
 
     if ($connect->connect_error) {
         die("Connection Failed: " . $connect->connect_error);

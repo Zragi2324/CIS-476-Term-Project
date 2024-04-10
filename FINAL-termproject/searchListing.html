@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="searchListing.css">
 </head>
 <body>
-    <h3> Welcome! Search for a vehicle down below</h3>
+    <h3 id="welcomeTxt"> Welcome! Search for a vehicle down below</h3>
     <div class="makePayment">
-    <h4>Do want to make a payment</h4>
+    <h4>Do want to make a payment, hit the payment button!</h4>
     <button id="paymentBtn">payment</button>
     </div>
+    <div class="container">
+
+    
     <div class="searching" >
+        <p><strong>Enter information to search for a car</strong></p>
         <form id ="searchCarListing">
             
             <input type ="number" id = "vin" placeholder="Enter your car vin"><br>
@@ -39,12 +43,12 @@
         <h4 id="booktxt">To Book a car hit the button below</h4>
         
         <form id="book">
-            <input type="text" id="username0" placeholder="enter your username">
-            <input type="number" id="carId" placeholder="Enter the vin for the car">
+            <input type="text" id="username0" placeholder="enter your username"><br>
+            <input type="number" id="carId" placeholder="Enter the vin for the car"><br>
             <label for="rentStart">Renting start day on</label><br>
             <input type="date" id="rentStart"><br>
             <label for="rentEnd">Renting End day on</label><br>
-            <input type="date" id="rentEnd">
+            <input type="date" id="rentEnd"><br>
             <button type ="submit" id="submitBook">Book vehicle!</button>
         </form>
     </div>
@@ -52,6 +56,9 @@
     <div id="searchRes">
 
     </div>
+
+    
+</div>
         <script>
 
 const bookForm = document.getElementById("book");
@@ -99,6 +106,7 @@ bookForm.addEventListener("submit", function (event){
             if (data.success) {
                 // Booking was successful
                 alert("Car booked successfully!");
+                location.reload();
                 
             } else {
                 // Booking failed

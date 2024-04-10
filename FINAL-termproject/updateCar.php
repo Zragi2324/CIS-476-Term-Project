@@ -6,11 +6,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the JSON data from the request body
     $data = json_decode(file_get_contents("php://input"));
 
-    // Extract data from the JSON object
+    // Extracted data from the JSON object
     $carID = $data->carID;
 
-    // Connect to your database
-    $connect = new mysqli("localhost", "root", "", "test");
+ 
+    $connect = new mysqli("localhost", "root", "", "termproject");
 
     // Check for database connection errors
     if($connect->connect_error) {
@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $fieldsToUpdate = array();
     $valuesToUpdate = array();
 
-    // Check which fields have values in the JSON object and add them to the arrays
     if (!empty($data->carMake)) {
         $fieldsToUpdate[] = "make=?";
         $valuesToUpdate[] = $data->carMake;

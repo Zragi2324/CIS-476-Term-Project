@@ -3,7 +3,7 @@
 function getUserId($username) {
   
     
-    $connect = new mysqli("localhost", "root", "", "test");
+    $connect = new mysqli("localhost", "root", "", "termproject");
 
     if ($connect->connect_error) {
         die("Connection Failed: " . $connect->connect_error);

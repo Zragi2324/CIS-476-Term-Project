@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //error_log(print_r($postData, true));
     $userID = $postData->id;
 
-    $connection = new mysqli("localhost", "root", "", "test");
+    $connection = new mysqli("localhost", "root", "", "termproject");
 
 
     $query = "DELETE FROM notifications WHERE id = ?";

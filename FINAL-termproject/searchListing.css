@@ -1,23 +1,49 @@
 
-.searching {
+body{
+
+
+background-image: url("./images/booking.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#welcomeTxt{
+    text-align: center;
+}
+.container {
     display: flex;
     justify-content: center;
-    align-items: center;
-   
-}
-.booking {
-    display: flex;
-    flex-direction: column; 
-    justify-content: flex-end; 
-    align-items: flex-end; 
-    margin-top: 20px; 
-    margin-bottom: 30px;
-    width: min-content; 
+    
 }
 
-.makePayment{
-    
-    position: absolute;
-    top: 0;
-    right: 0;
+
+.container > * {
+    margin: 5px 10px; 
 }
+
+.searching{
+    margin-left: 700px;
+    margin-right: 100px;
+    border: 2px solid black;
+    padding: 20px;
+}
+
+.booking{
+    border: 2px solid black;
+    padding: 2px;
+    text-align: center;
+}
+#paymentBtn{
+    margin-left: 50px;
+    font-size: 30px;
+}
+
+.searching, .booking, input[type="text"],
+.searching, .booking, button,
+#loginForm button {
+    font-size: 1.1rem;
+}
+
+.searching, .booking, #searchRes {
+    width: 700px; 
+}
+

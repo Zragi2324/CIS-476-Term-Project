@@ -66,7 +66,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sa2 = $user->sa2;
     $sa3 = $user->sa3;
 
-    $connect = new mysqli("localhost", "root", "", "test");
+    $connect = new mysqli("localhost", "root", "", "termproject");
 
     if($connect->connect_error) {
         die("Connection Failed: " . $connect->connect_error);

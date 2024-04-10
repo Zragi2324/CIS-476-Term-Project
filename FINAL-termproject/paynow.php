@@ -2,7 +2,7 @@
 
 include 'getUserId.php';
 
-$conn = new mysqli("localhost", "root", "", "test");
+$conn = new mysqli("localhost", "root", "", "termproject");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -15,11 +15,7 @@ function payBalance($conn, $username){
     $stmt = $conn->prepare($sqlQuery);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
-   // $result = $stmt->get_result();
-   $Payment = new NotificationSubject();
-   $observedUpdate = new NotificationObserver("Made Payment",$userID, $connect);
-   $Payment->attach( $observedUpdate);
-   $Payment->setNotification("You have paid your balance!");
+   
     if($stmt->execute()){
         return 0.00;
 }else{

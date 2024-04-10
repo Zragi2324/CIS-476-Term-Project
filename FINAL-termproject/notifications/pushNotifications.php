@@ -62,7 +62,7 @@ class NotificationObserver implements Observer {
             return;
         }
     
-        $sql = "INSERT INTO notifications (id, description, userID) VALUES (NULL, ?, ?)";
+        $sql = "INSERT INTO notifications ( description, userID) VALUES ( ?, ?)";
         $prepareStatement = $this->connection->prepare($sql);
     
         if (!$prepareStatement) {
